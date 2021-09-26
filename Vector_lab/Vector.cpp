@@ -1,31 +1,29 @@
 #include <iostream>
-class Vector
-{
-private:
-	double* data;
-	size_t size;
-	size_t capacity;
-	size_t grow_size;
-	void ExpandCapacityByN(const size_t n, const size_t index = 0, const bool end_insertion = true)
+#include "Vector.h"
+
+void Vector::ExpandCapacityByN(const size_t n, const size_t index, const bool end_insertion)
 	{
 		size_t new_capacity = capacity + n;
 		double* new_data = new double[new_capacity];
 		if (end_insertion)
 		{
-			for (size_t i = 0; i < size; i++)
+			for (size_t i = 0; i < new_capacity; i++)
 			{
+				if (i == size) break;
 				new_data[i] = data[i];
 			}
 		}
 		else
 		{
-			for (size_t i = 0; i < index; i++)
+			for (size_t i = 0; i < new_capacity; i++)
 			{
+				if (i == index) break;
 				new_data[i] = data[i];
 			}
 			data[index] = 0;
-			for (size_t i = index + 1; i < size; i++)
+			for (size_t i = index + 1; i < new_capacity; i++)
 			{
+				if (i == size) break;
 				new_data[i] = data[i - 1];
 			}
 		}
@@ -33,9 +31,8 @@ private:
 		data = new_data;
 		capacity = new_capacity;
 	}
-public:
-	Vector() : data(NULL), size(0), capacity(0), grow_size(10) {}
-	Vector(const size_t size)
+Vector::Vector() : data(NULL), size(0), capacity(0), grow_size(10) {}
+Vector::Vector(const size_t size)
 	{
 		grow_size = 10;
 		this->size = size;
@@ -46,27 +43,28 @@ public:
 			data[i] = 0;
 		}
 	}
-	~Vector()
+Vector::~Vector()
 	{
 		delete[] data;
 		size = 0;
 		capacity = 0;
 		grow_size = 0;
 	}
-	Vector(const Vector& rhs) :capacity(rhs.capacity), size(rhs.size)
+Vector::Vector(const Vector& rhs) :capacity(rhs.capacity), size(rhs.size)
 	{
 		data = new double[capacity];
-		for (size_t i = 0; i < size; ++i)
+		for (size_t i = 0; i < capacity; ++i)
 		{
+			if (i == size) break;
 			data[i] = rhs.data[i];
 		}
 		grow_size = rhs.grow_size;
 	}
-	size_t GetSize() const
+size_t Vector::GetSize() const
 	{
 		return size;
 	}
-	void PushBack(const double value)
+void Vector::PushBack(const double value)
 	{
 		if (size == 0 && capacity == 0 && data==NULL)
 		{
@@ -81,7 +79,7 @@ public:
 			size++;
 		}
 	}
-	void Insert(const double value, const size_t index)
+void Vector::Insert(const double value, const size_t index)
 	{
 		if (index<0 || index>size) throw std::out_of_range("Index is out of range");
 		if (size == 0 && capacity ==0 && data ==NULL)
@@ -103,7 +101,7 @@ public:
 	}
 
 
-	void Erase(const size_t index)
+void Vector::Erase(const size_t index)
 	{
 		if (size == 0) return;
 		if (index >= size) throw std::out_of_range("Index is out of range");
@@ -113,17 +111,17 @@ public:
 		}
 		size--;
 	}
-	double& operator[] (const size_t index)
+double& Vector::operator[] (const size_t index)
 	{
 		if (index >= size) throw std::out_of_range("Index is out of range");
 		return data[index];
 	}
-	double operator[](const size_t index) const
+double Vector::operator[](const size_t index) const
 	{
 		if (index >= size) throw std::out_of_range("Index is out of range");
 		return data[index];
 	}
-	Vector operator+= (const Vector& rhs)
+Vector Vector::operator+= (const Vector& rhs)
 	{
 		if (size != rhs.size) throw std::exception("Bad dimensions");
 		for (size_t i = 0; i < size; i++)
@@ -132,14 +130,14 @@ public:
 		}
 		return *this;
 	}
-	Vector operator+(const Vector& rhs) const
+Vector Vector::operator+(const Vector& rhs) const
 	{
 		if (size != rhs.size) throw std::exception("Bad dimensions");
 		Vector result(*this);
 		result += rhs;
 		return result;
 	}
-	Vector operator-= (const Vector& rhs)
+Vector Vector::operator-= (const Vector& rhs)
 	{
 		if (size != rhs.size) throw std::exception("Bad dimensions");
 		for (size_t i = 0; i < size; i++)
@@ -148,14 +146,14 @@ public:
 		}
 		return *this;
 	}
-	Vector operator-(const Vector& rhs) const
+Vector Vector::operator-(const Vector& rhs) const
 	{
 		if (size != rhs.size) throw std::exception("Bad dimensions");
 		Vector result(*this);
 		result -= rhs;
 		return result;
 	}
-	double operator*(const Vector& rhs) const
+double Vector::operator*(const Vector& rhs) const
 	{
 		if (size != rhs.size) throw std::exception("Bad dimensions");
 		double scalar_product = 0;
@@ -165,7 +163,7 @@ public:
 		}
 		return scalar_product;
 	}
-	Vector operator*=(const double value)
+Vector Vector::operator*=(const double value)
 	{
 		for (size_t i = 0; i < size; i++)
 		{
@@ -173,13 +171,13 @@ public:
 		}
 		return *this;
 	}
-	Vector operator*(const double value) const
+Vector Vector::operator*(const double value) const
 	{
 		Vector result(*this);
 		result *= value;
 		return result;
 	}
-	Vector operator/=(const double value)
+Vector Vector::operator/=(const double value)
 	{
 		if (value == 0) throw std::exception("Dividing by zero is prohibited");
 		for (size_t i = 0; i < size; i++)
@@ -188,13 +186,13 @@ public:
 		}
 		return *this;
 	}
-	Vector operator/(const double value) const
+Vector Vector::operator/(const double value) const
 	{
 		Vector result(*this);
 		result /= value;
 		return result;
 	}
-	bool operator==(const Vector& rhs) const
+bool Vector::operator==(const Vector& rhs) const
 	{
 		if (size != rhs.size) return false;
 		for (size_t i = 0; i < size; i++)
@@ -203,12 +201,10 @@ public:
 		}
 		return true;
 	}
-	bool operator!=(const Vector& rhs) const
-	{
-		return !(*this == rhs);
-	}
-	friend std::ostream& operator<< (std::ostream& out, const Vector& point);
-};
+bool Vector::operator!=(const Vector& rhs) const
+{
+	return !(*this == rhs);
+}
 std::ostream& operator<< (std::ostream& out, const Vector& vector)
 {
 	for (size_t i = 0; i < vector.size; i++)
@@ -278,4 +274,7 @@ int main()
 		}
 	}
 	std::cout << "После:  " << data << std::endl;
+	Vector c(data.GetSize());
+	c -= data;
+	std::cout << c << std::endl;
 }
