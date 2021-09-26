@@ -17,6 +17,7 @@ public:
 	void PushBack(const double value);
 	void Insert(const double value, const size_t index);
 	void Erase(const size_t index);
+	Vector& operator=(const Vector& rhs);
 	double& operator[] (const size_t index);
 	double operator[](const size_t index) const;
 	Vector operator+= (const Vector& rhs);

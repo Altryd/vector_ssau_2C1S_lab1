@@ -15,7 +15,8 @@
 *.vcxproj
 *.vcxproj.*
 *.sln
-
+Vector_lab.sln
+Vector_tests/
 
 # Build results
 [Dd]ebug/

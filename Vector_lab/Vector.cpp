@@ -99,7 +99,30 @@ void Vector::Insert(const double value, const size_t index)
 			size++;
 		}
 	}
-
+Vector& Vector::operator=(const Vector& rhs)
+{
+	if (this == &rhs) return *this;
+	if (size != rhs.size)
+	{
+		delete[] data;
+		data = new double[rhs.size];
+		for (size_t i = 0; i < rhs.size; i++)
+		{
+			data[i] = rhs.data[i];
+		}
+		size = rhs.size;
+	}
+	else
+	{
+		for (size_t i = 0; i < rhs.size; i++)
+		{
+			data[i] = rhs.data[i];
+		}
+	}
+	grow_size = rhs.grow_size;
+	capacity = rhs.capacity;
+	return *this;
+}
 
 void Vector::Erase(const size_t index)
 	{
@@ -226,55 +249,4 @@ Vector operator*(const double value, const Vector& rhs)
 	Vector result(rhs);
 	result *= value;
 	return result;
-}
-
-int main()
-{
-	/*Vector a(4);
-	for (size_t i = 0; i < a.GetSize(); i++)
-	{
-		a[i] += 1 +double(i);
-	}
-	std::cout << a << std::endl;
-	Vector b(4);
-	for (size_t i = 0; i < b.GetSize(); i++)
-	{
-		b[i] += 1 + (double)i * (double)i +50;
-	}
-	std::cout << b << std::endl;
-	Vector c = a + b;
-	std::cout << c << std::endl;
-	double s_p = a * b;
-	std::cout << s_p << std::endl;*/
-	setlocale(LC_ALL, "Russian");
-	Vector data(0);
-	//a.Insert(5,0);
-	//a.PushBack(20);
-	for (size_t i = 0; i < 11; i++)
-	{
-		data.Insert((double)i + 1, i);
-	}
-	std::cout << "До:  ";
-	for (size_t i = 0; i < 11; i++)
-	{
-		std::cout << i << " ";
-	}
-	std::cout << std::endl;
-	std::cout << "До:  " << data << std::endl << std::endl;
-	size_t size = data.GetSize();
-	for (int i = size-2; i >= 0; i-=2)
-	{
-		try {
-			std::cout << data[i] << std::endl;
-			data.Erase((size_t)i);
-		}
-		catch (std::exception& err)
-		{
-			std::cout << err.what() << std::endl;
-		}
-	}
-	std::cout << "После:  " << data << std::endl;
-	Vector c(data.GetSize());
-	c -= data;
-	std::cout << c << std::endl;
 }
