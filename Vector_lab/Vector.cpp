@@ -46,9 +46,6 @@ Vector::Vector(const size_t size)
 Vector::~Vector()
 	{
 		delete[] data;
-		size = 0;
-		capacity = 0;
-		grow_size = 0;
 	}
 Vector::Vector(const Vector& rhs) :size(rhs.size), capacity(rhs.capacity)
 	{
@@ -60,6 +57,14 @@ Vector::Vector(const Vector& rhs) :size(rhs.size), capacity(rhs.capacity)
 		}
 		grow_size = rhs.grow_size;
 	}
+void Vector::Clear()
+{
+	delete[] data;
+	data = NULL;
+	size = 0;
+	capacity = 0;
+	grow_size = 0;
+}
 size_t Vector::GetSize() const
 	{
 		return size;
@@ -71,12 +76,12 @@ void Vector::Print() const
 		std::cout << "Vector is empty" << std::endl;
 		return;
 	}
-	std::cout << "[ ";
-	for (size_t i = 0; i < size; i++)
+	std::cout << "[";
+	for (size_t i = 0; i < size-1; i++)
 	{
-		std::cout << data[i] << " ";
+		std::cout << data[i] << " , ";
 	}
-	std::cout << " ] , the size of vector:" << size << std::endl;
+	std::cout << data[size-1] <<"] , the size of vector:" << size << std::endl;
 }
 void Vector::PushBack(const double value)
 	{
@@ -244,13 +249,17 @@ bool Vector::operator!=(const Vector& rhs) const
 }
 std::ostream& operator<< (std::ostream& out, const Vector& vector)
 {
-	for (size_t i = 0; i < vector.size; i++)
+	if (!vector.size)
 	{
-		out << vector.data[i] << " ";
+		out << "Vector is empty" << std::endl;
+		return out;
 	}
-	out << std::endl;
-
-
+	out << "[";
+	for (size_t i = 0; i < vector.size-1; i++)
+	{
+		out << vector.data[i] << " , ";
+	}
+	out << vector.data[vector.size-1] <<"] , the size of vector:" << vector.size << std::endl;
 	return out;
 }
 Vector operator*=(const double value, Vector& rhs)

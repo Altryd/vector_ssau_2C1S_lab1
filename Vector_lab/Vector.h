@@ -14,6 +14,7 @@ public:
 	Vector(const size_t size);
 	~Vector();
 	Vector(const Vector& rhs);
+	void Clear();
 	size_t GetSize() const;
 	void Print() const;
 	void PushBack(const double value);
