@@ -7,6 +7,7 @@ private:
 	size_t size;
 	size_t capacity;
 	size_t grow_size;
+	static double epsilon;
 	void ExpandCapacityByN(const size_t n, const size_t index = 0, const bool end_insertion = true);
 public:
 	Vector();

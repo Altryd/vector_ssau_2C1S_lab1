@@ -1,6 +1,6 @@
 #include <iostream>
 #include "Vector.h"
-
+double Vector::epsilon = 0.001;
 void Vector::ExpandCapacityByN(const size_t n, const size_t index, const bool end_insertion)
 	{
 		size_t new_capacity = capacity + n;
@@ -220,7 +220,7 @@ bool Vector::operator==(const Vector& rhs) const
 		if (size != rhs.size) return false;
 		for (size_t i = 0; i < size; i++)
 		{
-			if (data[i] != rhs.data[i]) return false;
+			if (abs(data[i] - rhs.data[i]) >= epsilon) return false;
 		}
 		return true;
 	}
