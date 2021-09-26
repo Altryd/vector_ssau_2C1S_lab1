@@ -50,7 +50,7 @@ Vector::~Vector()
 		capacity = 0;
 		grow_size = 0;
 	}
-Vector::Vector(const Vector& rhs) :capacity(rhs.capacity), size(rhs.size)
+Vector::Vector(const Vector& rhs) :size(rhs.size), capacity(rhs.capacity)
 	{
 		data = new double[capacity];
 		for (size_t i = 0; i < capacity; ++i)
@@ -64,6 +64,20 @@ size_t Vector::GetSize() const
 	{
 		return size;
 	}
+void Vector::Print() const
+{
+	if (!size)
+	{
+		std::cout << "Vector is empty" << std::endl;
+		return;
+	}
+	std::cout << "[ ";
+	for (size_t i = 0; i < size; i++)
+	{
+		std::cout << data[i] << " ";
+	}
+	std::cout << " ] , the size of vector:" << size << std::endl;
+}
 void Vector::PushBack(const double value)
 	{
 		if (size == 0 && capacity == 0 && data==NULL)
@@ -81,7 +95,7 @@ void Vector::PushBack(const double value)
 	}
 void Vector::Insert(const double value, const size_t index)
 	{
-		if (index<0 || index>size) throw std::out_of_range("Index is out of range");
+		if (index>size) throw std::out_of_range("Index is out of range");
 		if (size == 0 && capacity ==0 && data ==NULL)
 		{
 			data = new double[grow_size];
@@ -146,7 +160,7 @@ double Vector::operator[](const size_t index) const
 	}
 Vector Vector::operator+= (const Vector& rhs)
 	{
-		if (size != rhs.size) throw std::exception("Bad dimensions");
+		if (size != rhs.size) throw "Bad dimensions";
 		for (size_t i = 0; i < size; i++)
 		{
 			data[i] += rhs.data[i];
@@ -155,14 +169,14 @@ Vector Vector::operator+= (const Vector& rhs)
 	}
 Vector Vector::operator+(const Vector& rhs) const
 	{
-		if (size != rhs.size) throw std::exception("Bad dimensions");
+		if (size != rhs.size) throw "Bad dimensions";
 		Vector result(*this);
 		result += rhs;
 		return result;
 	}
 Vector Vector::operator-= (const Vector& rhs)
 	{
-		if (size != rhs.size) throw std::exception("Bad dimensions");
+		if (size != rhs.size) throw "Bad dimensions";
 		for (size_t i = 0; i < size; i++)
 		{
 			data[i] -= rhs.data[i];
@@ -171,14 +185,14 @@ Vector Vector::operator-= (const Vector& rhs)
 	}
 Vector Vector::operator-(const Vector& rhs) const
 	{
-		if (size != rhs.size) throw std::exception("Bad dimensions");
+		if (size != rhs.size) throw "Bad dimensions";
 		Vector result(*this);
 		result -= rhs;
 		return result;
 	}
 double Vector::operator*(const Vector& rhs) const
 	{
-		if (size != rhs.size) throw std::exception("Bad dimensions");
+		if (size != rhs.size) throw "Bad dimensions";
 		double scalar_product = 0;
 		for (size_t i = 0; i < size; i++)
 		{
@@ -202,7 +216,7 @@ Vector Vector::operator*(const double value) const
 	}
 Vector Vector::operator/=(const double value)
 	{
-		if (value == 0) throw std::exception("Dividing by zero is prohibited");
+		if (value == 0) throw "Dividing by zero is prohibited";
 		for (size_t i = 0; i < size; i++)
 		{
 			data[i] /= value;

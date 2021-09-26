@@ -1,77 +1,80 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "Vector.h"
+#include <climits>
+#include <string>
+#include <cstring>
+bool StrToLong(const char* str, long int* value)
+{
+	char* endptr = NULL;
+	*value = strtol(str, &endptr, 0);
+	if (endptr == str)return false; //к примеру при вводе "привет"
+	if ((*value == LONG_MIN || *value == LONG_MAX) && errno == ERANGE) return false; //при вводе большого числа
+	if (*endptr != str[strlen(str)]) return false; //при вводе 23привет
+	return true;
+}
+long int NumberNeeded(const long int left_border, const long int right_border, const char* condition)
+{
+	printf("%s\n", condition);
+	long int value = 0;
+	std::string str;
+	while (true)
+	{
+		std::cin >> str;
+		if (StrToLong(str.c_str(), &value) == 1) break;
+		else
+		{
+			printf("Input error, try again\n");
+		}
+	}
+	while (true)
+		if (value >= left_border && value <= right_border) return value;
+		else
+		{
+			printf("The number doesn't satisfy the conidition %s\n", condition);
+			while (true)
+			{
+				str.clear();
+				std::cin >> str;
+				if (StrToLong(str.c_str(), &value) == 1) break;
+				else
+				{
+					printf("Input error, try again\n");
+				}
+			}
+		}
+}
+
+
 int main()
 {
-	/*Vector a(4);
-	for (size_t i = 0; i < a.GetSize(); i++)
+	bool function_is_working = true;
+	Vector first_vector;
+	Vector second_vector;
+	while (function_is_working)
 	{
-		a[i] += 1 +double(i);
-	}
-	std::cout << a << std::endl;
-	Vector b(4);
-	for (size_t i = 0; i < b.GetSize(); i++)
-	{
-		b[i] += 1 + (double)i * (double)i +50;
-	}
-	std::cout << b << std::endl;
-	Vector c = a + b;
-	std::cout << c << std::endl;
-	double s_p = a * b;
-	std::cout << s_p << std::endl;
-	setlocale(LC_ALL, "Russian");
-	Vector data(0);
-	//a.Insert(5,0);
-	//a.PushBack(20);
-	for (size_t i = 0; i < 11; i++)
-	{
-		data.Insert((double)i + 1, i);
-	}
-	std::cout << "До:  ";
-	for (size_t i = 0; i < 11; i++)
-	{
-		std::cout << i << " ";
-	}
-	std::cout << std::endl;
-	std::cout << "До:  " << data << std::endl << std::endl;
-	size_t size = data.GetSize();
-	for (int i = size - 2; i >= 0; i -= 2)
-	{
-		try {
-			std::cout << data[i] << std::endl;
-			data.Erase((size_t)i);
-		}
-		catch (std::exception& err)
+		long int action = NumberNeeded(0, 20, "From 0 to 20");
+		/*switch (action)
 		{
-			std::cout << err.what() << std::endl;
-		}
+			case 0: //чтение
+			{
+
+				break;
+			}
+			case 1: //запись
+			{
+
+				break;
+			}
+			case 2: //сложить два вектора
+			{
+
+				break;
+			}
+			case 3: //вычесть из первого второй вектор
+			{
+
+				break;
+			}
+		}*/
 	}
-	std::cout << "После:  " << data << std::endl;
-	Vector c(data.GetSize());
-	c -= data;
-	std::cout << c << std::endl;*/
-	Vector a(3);
-	Vector b(3);
-	for (size_t i = 0; i < a.GetSize(); i++)
-	{
-		a[i] += i;
-		b[i] += 2;
-	}
-	Vector c;
-	c = a + b;
-#ifdef DEBUG_LINES
-	std::cout << c << std::endl;
-#endif
-	c = c;
-#ifdef DEBUG_LINES
-	std::cout << c << std::endl;
-#endif
-	c = a;
-#ifdef DEBUG_LINES
-	std::cout << c << std::endl;
-#endif
-	Vector d(10);
-	c = d;
-#ifdef DEBUG_LINES
-	std::cout << c << std::endl;
-#endif
 }
