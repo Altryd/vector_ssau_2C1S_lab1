@@ -5,6 +5,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <cfloat>
+#include <time.h>
 bool StrToLong(const char* str, long int* value)
 {
 	char* endptr = NULL;
