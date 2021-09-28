@@ -63,7 +63,6 @@ void Vector::Clear()
 	data = NULL;
 	size = 0;
 	capacity = 0;
-	grow_size = 0;
 }
 size_t Vector::GetSize() const
 	{
@@ -87,9 +86,10 @@ void Vector::PushBack(const double value)
 	{
 		if (size == 0 && capacity == 0 && data==NULL)
 		{
-			data = new double[grow_size];
+			data = new double[capacity + grow_size];
 			data[size] = value;
 			size++;
+			capacity += grow_size;
 		}
 		else
 		{
@@ -163,7 +163,7 @@ double Vector::operator[](const size_t index) const
 		if (index >= size) throw std::out_of_range("Index is out of range");
 		return data[index];
 	}
-Vector Vector::operator+= (const Vector& rhs)
+Vector& Vector::operator+= (const Vector& rhs)
 	{
 		if (size != rhs.size) throw "Bad dimensions";
 		for (size_t i = 0; i < size; i++)
@@ -179,7 +179,7 @@ Vector Vector::operator+(const Vector& rhs) const
 		result += rhs;
 		return result;
 	}
-Vector Vector::operator-= (const Vector& rhs)
+Vector& Vector::operator-= (const Vector& rhs)
 	{
 		if (size != rhs.size) throw "Bad dimensions";
 		for (size_t i = 0; i < size; i++)
@@ -205,7 +205,7 @@ double Vector::operator*(const Vector& rhs) const
 		}
 		return scalar_product;
 	}
-Vector Vector::operator*=(const double value)
+Vector& Vector::operator*=(const double value)
 	{
 		for (size_t i = 0; i < size; i++)
 		{
@@ -219,7 +219,7 @@ Vector Vector::operator*(const double value) const
 		result *= value;
 		return result;
 	}
-Vector Vector::operator/=(const double value)
+Vector& Vector::operator/=(const double value)
 	{
 		if (value == 0) throw "Dividing by zero is prohibited";
 		for (size_t i = 0; i < size; i++)
@@ -262,7 +262,7 @@ std::ostream& operator<< (std::ostream& out, const Vector& vector)
 	out << vector.data[vector.size-1] <<"] , the size of vector:" << vector.size << std::endl;
 	return out;
 }
-Vector operator*=(const double value, Vector& rhs)
+Vector& operator*=(const double value, Vector& rhs)
 {
 	rhs *= value;
 	return rhs;
